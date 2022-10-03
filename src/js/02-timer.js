@@ -21,6 +21,7 @@ const options = {
         backOverlay: true,
         clickToClose: true,
       });
+      refs.startBtn.disabled = true;
       return;
     }
     refs.startBtn.disabled = false;
@@ -30,26 +31,21 @@ const options = {
       clickToClose: true,
     });
     selectedDate = selectedDates[0];
-    console.log(selectedDates);
   },
 };
-
 flatpickr('#datetime-picker', options);
 const timer = {
   intervalId: null,
   refs: {},
-  start(rootSelector, deadline) {
-    const delta = deadline - Date.now();
-    console.log(deadline);
+  start(rootSelector, selectedDate) {
     this.getRefs(rootSelector);
     this.intervalId = setInterval(() => {
-      const diff = deadline - Date.now();
+      const diff = selectedDate.getTime() - Date.now();
       const data = this.convertMs(diff);
       this.refs.days.textContent = this.addLeadingZero(data.days);
       this.refs.hours.textContent = this.addLeadingZero(data.hours);
       this.refs.minutes.textContent = this.addLeadingZero(data.minutes);
       this.refs.seconds.textContent = this.addLeadingZero(data.seconds);
-      console.log('data', data);
     }, 1000);
   },
   getRefs(rootSelector) {
@@ -69,6 +65,4 @@ const timer = {
     return String(value).padStart(2, '0');
   },
 };
-
-refs.startBtn.addEventListener('click', timer.refs.start);
-timer.start(refs.timerRef, selectedDate);
+refs.startBtn.addEventListener('click', timer.start);
