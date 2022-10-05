@@ -5,9 +5,10 @@ import { Notify } from 'notiflix/build/notiflix-notify-aio';
 const refs = {
   startBtn: document.querySelector('[data-start]'),
   timerRef: document.querySelector('.timer'),
+  styleValue: document.querySelector('.value'),
 };
+refs.startBtn.disabled = true;
 let selectedDate = null;
-
 const options = {
   enableTime: true,
   time_24hr: true,
@@ -21,11 +22,10 @@ const options = {
         backOverlay: true,
         clickToClose: true,
       });
-      refs.startBtn.disabled = true;
       return;
     }
     refs.startBtn.disabled = false;
-    Notify.success('Відлік розпочато!', {
+    Notify.success('Можемо починати!', {
       position: 'center-center',
       backOverlay: true,
       clickToClose: true,
@@ -37,10 +37,20 @@ flatpickr('#datetime-picker', options);
 const timer = {
   intervalId: null,
   refs: {},
-  start(rootSelector, selectedDate) {
-    this.getRefs(rootSelector);
+  start() {
+    refs.startBtn.disabled = true;
+    this.getRefs(refs.timerRef);
     this.intervalId = setInterval(() => {
+      console.log(selectedDate);
       const diff = selectedDate.getTime() - Date.now();
+      if (diff <= 1000) {
+        clearInterval(this.intervalId);
+        Notify.success('Дедлайн настав', {
+          position: 'center-center',
+          backOverlay: true,
+          clickToClose: true,
+        });
+      }
       const data = this.convertMs(diff);
       this.refs.days.textContent = this.addLeadingZero(data.days);
       this.refs.hours.textContent = this.addLeadingZero(data.hours);
@@ -65,4 +75,4 @@ const timer = {
     return String(value).padStart(2, '0');
   },
 };
-refs.startBtn.addEventListener('click', timer.start);
+refs.startBtn.addEventListener('click', timer.start.bind(timer));

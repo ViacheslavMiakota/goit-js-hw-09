@@ -16,3 +16,29 @@ img {
   display: block;
   max-width: 100%;
 }
+.value {
+  background-color: purple;
+  color: aqua;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  font-size: 44px;
+  line-height: normal;
+}
+.label {
+  text-align: center;
+  font-size: large;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.timer {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
