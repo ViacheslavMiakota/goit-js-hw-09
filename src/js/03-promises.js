@@ -17,15 +17,14 @@ function createPromise(position, delay) {
     }, delay);
   });
 }
-
 refs.submitBtn.addEventListener('submit', event => {
   event.preventDefault();
-  let numPosition = 0;
-  const delayTotal =
-    Number(event.currentTarget.delay.value) +
-    Number(event.currentTarget.step.value);
-  for (let i = 0; i < Number(event.currentTarget.amount.value); i++) {
-    createPromise(numPosition, delayTotal)
+  // const { delay, step, amount } = event.currentTarget.elements;
+  let delay = Number(event.currentTarget.delay.value);
+  let step = Number(event.currentTarget.step.value);
+  let amount = Number(event.currentTarget.amount.value);
+  for (let i = 0; i < amount; i++) {
+    createPromise(i + 1, delay)
       .then(({ position, delay }) => {
         Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`, {
           position: 'center-center',
@@ -40,24 +39,9 @@ refs.submitBtn.addEventListener('submit', event => {
           clickToClose: true,
         });
       });
-    numPosition += event.currentTarget.step.value;
+    delay += step;
   }
 });
 function preventDefault(event) {
   event.preventDefault();
 }
-
-// let delay = 1000;
-// const step = 500;
-// const amount = 5;
-
-// for (let i = 0; i < amount; i++) {
-//   createPromise(i + 1, delay)
-//     .then(({ position, delay }) => {
-//       console.log(`✅ Fulfilled promise ${position} in ${delay}ms`);
-//     })
-//     .catch(({ position, delay }) => {
-//       console.log(`❌ Rejected promise ${position} in ${delay}ms`);
-//     });
-//   delay += event.currentTarget.step.value;
-// }
